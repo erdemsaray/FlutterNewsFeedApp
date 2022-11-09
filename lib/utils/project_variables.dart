@@ -14,4 +14,10 @@ class ProjectStyles {
 class ProjectColors {
   static const Color splashColor = Colors.blue;
   static Color cardBackgroundColor = const Color.fromARGB(255, 239, 237, 237);
+  static Color scaffoldBackgroundColor = Colors.white;
+  static Color iconBlackColor = Colors.black;
+  static Color labelColor = Colors.white;
+  static Color iconTextColorLight = Colors.white;
+  static Color elevatedButtonColorDark = Colors.black54;
+  static Color textColorBlack = Colors.black;
 }

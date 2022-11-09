@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class NewsWebviewPage extends StatefulWidget {
-  String newsURL;
-  NewsWebviewPage({Key? key, required this.newsURL}) : super(key: key);
+class NewsWebViewPage extends StatefulWidget {
+  final String newsURL;
+  const NewsWebViewPage({Key? key, required this.newsURL}) : super(key: key);
 
   @override
-  State<NewsWebviewPage> createState() => _NewsWebviewPageState();
+  State<NewsWebViewPage> createState() => _NewsWebViewPageState();
 }
 
-class _NewsWebviewPageState extends State<NewsWebviewPage> {
+class _NewsWebViewPageState extends State<NewsWebViewPage> {
   bool isLoading = true;
-  late WebViewController _controller;
   @override
   void initState() {
     super.initState();
@@ -35,7 +34,7 @@ class _NewsWebviewPageState extends State<NewsWebviewPage> {
             },
           ),
           isLoading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Stack(),

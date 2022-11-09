@@ -6,21 +6,9 @@ import 'package:newsapp/views/news_webview_page.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NewsDetailsPage extends StatefulWidget {
-  final String newsTitle;
-  final String newsImageURL;
-  final String newsDetails;
-  final String newsURL;
-  final String newsDate;
-  final String newsSource;
+  final News newsModel;
 
-  const NewsDetailsPage(
-      {super.key,
-      required this.newsTitle,
-      required this.newsImageURL,
-      required this.newsDetails,
-      required this.newsURL,
-      required this.newsDate,
-      required this.newsSource});
+  const NewsDetailsPage({super.key, required this.newsModel});
 
   @override
   State<NewsDetailsPage> createState() => _NewsDetailsPageState();
@@ -35,10 +23,10 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
     var heightSize = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ProjectColors.scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          color: Colors.black,
+          color: ProjectColors.iconBlackColor,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -46,20 +34,17 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
         ),
         actions: [
           IconButton(
-              color: Colors.black,
+              color: ProjectColors.iconBlackColor,
               onPressed: () async {
-                await Share.share('Share this link with your connections!', subject: widget.newsURL);
+                await Share.share('Share this link with your connections!', subject: widget.newsModel.newsURL);
               },
               icon: const Icon(Icons.share)),
           IconButton(
-              color: Colors.black,
+              color: ProjectColors.iconBlackColor,
               onPressed: () {
                 setState(() {
                   isFavorite = !isFavorite;
-                  News newModel = News(widget.newsTitle, widget.newsDetails, widget.newsDate, widget.newsImageURL,
-                      widget.newsURL, widget.newsSource);
-
-                  _favoriteNewsController.addToFavorites(newModel);
+                  _favoriteNewsController.addToFavorites(widget.newsModel);
                 });
               },
               icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border))
@@ -82,7 +67,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                     Container(
                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Image.network(
-                        widget.newsImageURL,
+                        widget.newsModel.imageURL,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -90,7 +75,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 10,
                     ),
                     Text(
-                      widget.newsTitle,
+                      widget.newsModel.title,
                       style: ProjectStyles.newsDetailsTitle,
                     ),
                     const SizedBox(
@@ -103,14 +88,14 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                         children: [
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.source,
-                                color: Colors.black,
+                                color: ProjectColors.iconBlackColor,
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
-                              Text(widget.newsSource),
+                              Text(widget.newsModel.source),
                             ],
                           ),
                           const SizedBox(
@@ -118,14 +103,14 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                           ),
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.date_range,
-                                color: Colors.black,
+                                color: ProjectColors.iconBlackColor,
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
-                              Text(widget.newsDate.split('T').first)
+                              Text(widget.newsModel.date.split('T').first)
                             ],
                           ),
                         ],
@@ -135,7 +120,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 10,
                     ),
                     Text(
-                      widget.newsDetails,
+                      widget.newsModel.description,
                       style: ProjectStyles.newsDetailsDetail,
                     ),
                     const Expanded(child: SizedBox(height: 40)),
@@ -144,18 +129,18 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => (NewsWebviewPage(
-                                      newsURL: widget.newsURL,
+                                builder: (_) => (NewsWebViewPage(
+                                      newsURL: widget.newsModel.newsURL,
                                     ))),
                           );
                         },
-                        child: const Text(
-                          "News Source",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(const Size(200, 40)),
-                          backgroundColor: MaterialStateProperty.all(Colors.black54),
+                          backgroundColor: MaterialStateProperty.all(ProjectColors.elevatedButtonColorDark),
+                        ),
+                        child: Text(
+                          "News Source",
+                          style: TextStyle(color: ProjectColors.iconTextColorLight, fontSize: 18),
                         )),
                   ],
                 ),

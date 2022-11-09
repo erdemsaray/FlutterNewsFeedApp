@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/controllers/news_controller.dart';
 import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/widgets/news_card_widget.dart';
+import 'package:newsapp/widgets/custom_card_widget.dart';
 
 class NewsSearchPage extends StatefulWidget {
   final String searchValue;
@@ -12,7 +12,7 @@ class NewsSearchPage extends StatefulWidget {
 }
 
 class _NewsSearchPageState extends State<NewsSearchPage> {
-  NewsController _newsController = NewsController();
+  final NewsController _newsController = NewsController();
   bool loading = true;
 
   void getNewsData() async {
@@ -33,48 +33,38 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: Container(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Text(
-                  "Result for: ${widget.searchValue}",
-                  style: ProjectStyles.resultTextStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                loading
-                    ? Center(child: CircularProgressIndicator())
-                    : Expanded(
-                        child: Container(
-                            child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: 10,
-                          itemBuilder: ((context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 2),
-                              child: NewsCardWidget(
-                                newsTitle: _newsController.news[index].title,
-                                newsImageURL: _newsController.news[index].imageURL,
-                                newsDetails: _newsController.news[index].description,
-                                newsURL: _newsController.news[index].newsURL,
-                                newsDate: _newsController.news[index].date,
-                                newsSource: _newsController.news[index].source,
-                              ),
-                            );
-                          }),
-                          
-                        )
-
-                            
+      backgroundColor: ProjectColors.scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Text(
+                "Result for: ${widget.searchValue}",
+                style: ProjectStyles.resultTextStyle,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              loading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: _newsController.news.length,
+                        itemBuilder: ((context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 2),
+                            child: CustomCardWidget(
+                              newsModel: _newsController.news[index],
                             ),
+                          );
+                        }),
                       ),
-              ],
-            ),
+                    ),
+            ],
           ),
         ),
       ),

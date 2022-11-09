@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/views/favorite_news_page.dart';
-import 'package:newsapp/views/feed_news_page.dart';
+import 'package:newsapp/views/news_favorite_page.dart';
+import 'package:newsapp/views/news_feed_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,8 +45,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           notchMargin: 10,
           shape: const CircularNotchedRectangle(),
           child: TabBar(
-            indicatorColor: Colors.blue,
-            labelColor: Colors.white,
+            indicatorColor: ProjectColors.splashColor,
+            labelColor: ProjectColors.labelColor,
             controller: _tabController,
             tabs: const [
               Tab(

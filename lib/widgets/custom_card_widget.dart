@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/modals/news.dart';
 import 'package:newsapp/utils/project_variables.dart';
 import 'package:newsapp/views/news_details_page.dart';
 
-class NewsCardWidget extends StatelessWidget {
-  const NewsCardWidget(
-      {super.key,
-      required this.newsTitle,
-      required this.newsImageURL,
-      required this.newsDetails,
-      required this.newsURL,
-      required this.newsDate,
-      required this.newsSource});
-
-  final String newsTitle;
-  final String newsImageURL;
-  final String newsDetails;
-  final String newsURL;
-  final String newsDate;
-  final String newsSource;
+class CustomCardWidget extends StatelessWidget {
+  final News newsModel;
+  const CustomCardWidget({
+    super.key,
+    required this.newsModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +18,10 @@ class NewsCardWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => NewsDetailsPage(
-                  newsTitle: newsTitle,
-                  newsImageURL: newsImageURL,
-                  newsDetails: newsDetails,
-                  newsURL: newsURL,
-                  newsDate: newsDate,
-                  newsSource: newsSource)),
+            builder: (_) => NewsDetailsPage(
+              newsModel: newsModel,
+            ),
+          ),
         );
       },
       child: Card(
@@ -49,7 +37,7 @@ class NewsCardWidget extends StatelessWidget {
               child: SizedBox(
                 width: 80,
                 child: Image.network(
-                  newsImageURL,
+                  newsModel.imageURL,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -60,21 +48,21 @@ class NewsCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    newsTitle,
+                    newsModel.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, color: ProjectColors.textColorBlack, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    newsDetails,
+                    newsModel.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
+                      color: ProjectColors.textColorBlack,
                     ),
                   ),
                   const SizedBox(
@@ -84,9 +72,10 @@ class NewsCardWidget extends StatelessWidget {
                     style: ProjectStyles.newsCardBottomDetails,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text('Source: $newsSource'), Text('Date: ${newsDate.split('T').first}')],
+                      children: [Text('Source: ${newsModel.source}'), Text('Date: ${newsModel.date.split('T').first}'),],
                     ),
-                  )
+                  ),
+
                 ],
               ),
             ),

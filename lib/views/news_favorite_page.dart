@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/controllers/favorite_news_controller.dart';
 import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/widgets/news_card_widget.dart';
+import 'package:newsapp/widgets/custom_card_widget.dart';
 
 class FavoriteNewsPage extends StatefulWidget {
   const FavoriteNewsPage({super.key});
@@ -12,11 +12,12 @@ class FavoriteNewsPage extends StatefulWidget {
 
 class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
   final FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
-  bool loading = true;//favoriler yüklenene kadar circular progress indicator
+  bool loading = true; //favoriler yüklenene kadar circular progress indicator
 
   void getNewsData() async {
     await _favoriteNewsController.getFavoriteNews();
-    if (mounted) {//favoriler gelmeden page'in dispose durumunda mounted kullanmazsak hata verir.     
+    if (mounted) {
+      //favoriler gelmeden page'in dispose durumunda mounted kullanmazsak hata verir.
       setState(() {
         loading = false;
       });
@@ -32,7 +33,7 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: ProjectColors.scaffoldBackgroundColor,
       body: SizedBox(
         child: SafeArea(
           child: Padding(
@@ -43,16 +44,16 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         "User Favorites",
                         style: ProjectStyles.titleStyle,
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Icon(
                           Icons.favorite,
-                          color: Colors.black,
+                          color: ProjectColors.iconBlackColor,
                         ),
                       ),
                     ],
@@ -70,16 +71,10 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                               itemCount: _favoriteNewsController.favoriteNews.length,
                               itemBuilder: ((context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 2),
-                                  child: NewsCardWidget(
-                                    newsTitle: _favoriteNewsController.favoriteNews[index].title,
-                                    newsImageURL: _favoriteNewsController.favoriteNews[index].imageURL,
-                                    newsDetails: _favoriteNewsController.favoriteNews[index].description,
-                                    newsURL: _favoriteNewsController.favoriteNews[index].newsURL,
-                                    newsDate: _favoriteNewsController.favoriteNews[index].date,
-                                    newsSource: _favoriteNewsController.favoriteNews[index].source,
-                                  ),
-                                );
+                                    padding: const EdgeInsets.only(bottom: 2),
+                                    child: CustomCardWidget(
+                                      newsModel: _favoriteNewsController.favoriteNews[index],
+                                    ));
                               }),
                             )),
                 )

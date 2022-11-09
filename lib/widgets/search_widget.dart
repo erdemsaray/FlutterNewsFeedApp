@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/utils/project_variables.dart';
 
 class CustomSearchWidget extends StatelessWidget {
   const CustomSearchWidget({
@@ -18,29 +19,34 @@ class CustomSearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: const TextStyle(color: Colors.black),
+      style: TextStyle(color: ProjectColors.textColorBlack),
       controller: textFormController,
       autofocus: false,
       decoration: InputDecoration(
-        enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-          color: Colors.black,
-        )),
-        hoverColor: Colors.black,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: ProjectColors.textColorBlack,
+          ),
+        ),
+        hoverColor: ProjectColors.textColorBlack,
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.black),
+        hintStyle: TextStyle(color: ProjectColors.textColorBlack),
         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
         suffixIcon: IconButton(
           onPressed: () {
             searchClicked();
           },
           icon: Icon(formIcon),
-          color: Colors.black,
+          color: ProjectColors.iconBlackColor,
         ),
         prefixIcon: Icon(
           formSuffixIcon,
-          color: Colors.black,
+          color: ProjectColors.iconBlackColor,
         ),
       ),
     );
