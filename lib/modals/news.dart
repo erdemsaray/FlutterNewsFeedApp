@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 //haber model sınıfı
 class News {
   late String title;
@@ -30,17 +31,13 @@ class News {
         'source': news.source,
       };
 
-
-//encode - decode işlemlerini elimizdeki favoriteNews listesini dönüştürerek shared preferences ile lokale kaydetmek için kullanıyoruz. 
+//encode - decode işlemlerini elimizdeki favoriteNews listesini dönüştürerek shared preferences ile lokale kaydetmek için kullanıyoruz.
 
   static String encode(List<News> news) => json.encode(
         news.map<Map<String, dynamic>>((news2) => News.toMap(news2)).toList(),
       );
 //Favorileri kaydetmek için farklı yollar da izlenebilir.
 
-static List<News> decode(String news) =>
-      (json.decode(news) as List<dynamic>)
-          .map<News>((item) => News.fromJson(item))
-          .toList();
-
+  static List<News> decode(String news) =>
+      (json.decode(news) as List<dynamic>).map<News>((item) => News.fromJson(item)).toList();
 }

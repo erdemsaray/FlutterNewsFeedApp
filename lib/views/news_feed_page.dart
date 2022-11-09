@@ -59,7 +59,10 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
                         itemBuilder: ((context, index) {
                           return Padding(
                               padding: const EdgeInsets.only(bottom: 2),
-                              child: CustomCardWidget(newsModel: _newsController.news[index]));
+                              child: CustomCardWidget(
+                                newsModel: _newsController.news[index],
+                                erasable: false,
+                              ));
                         }),
                       ),
                     ),

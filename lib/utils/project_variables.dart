@@ -20,4 +20,6 @@ class ProjectColors {
   static Color iconTextColorLight = Colors.white;
   static Color elevatedButtonColorDark = Colors.black54;
   static Color textColorBlack = Colors.black;
+  static Color iconRedColor = Colors.red;
+
 }

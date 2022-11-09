@@ -15,9 +15,15 @@ class NewsDetailsPage extends StatefulWidget {
 }
 
 FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
-bool isFavorite = false;
+bool isFavorited = false;
 
 class _NewsDetailsPageState extends State<NewsDetailsPage> {
+  @override
+  void initState() {
+    isFavorited = false;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var heightSize = MediaQuery.of(context).size.height;
@@ -43,11 +49,11 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
               color: ProjectColors.iconBlackColor,
               onPressed: () {
                 setState(() {
-                  isFavorite = !isFavorite;
+                  isFavorited = !isFavorited;
                   _favoriteNewsController.addToFavorites(widget.newsModel);
                 });
               },
-              icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border))
+              icon: Icon(isFavorited ? Icons.favorite : Icons.favorite_border))
         ],
         title: const Text(
           "News Details",

@@ -10,6 +10,8 @@ class FavoriteNewsPage extends StatefulWidget {
   State<FavoriteNewsPage> createState() => _FavoriteNewsPageState();
 }
 
+bool isClearButtonClicked = false;
+
 class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
   final FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
   bool loading = true; //favoriler yüklenene kadar circular progress indicator
@@ -49,13 +51,26 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                         "User Favorites",
                         style: ProjectStyles.titleStyle,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Icon(
-                          Icons.favorite,
-                          color: ProjectColors.iconBlackColor,
-                        ),
-                      ),
+                      const Expanded(
+                          child: SizedBox(
+                        width: 10,
+                      )),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
+                              backgroundColor: isClearButtonClicked
+                                  ? MaterialStateProperty.all(Colors.grey[300])
+                                  : MaterialStateProperty.all(Colors.transparent)),
+                          onPressed: () {
+                            setState(() {
+                              isClearButtonClicked = !isClearButtonClicked;
+                            });
+                          },
+                          child: Icon(
+                            Icons.clear_sharp,
+                            color: ProjectColors.iconRedColor,
+                            size: 30,
+                          ))
                     ],
                   ),
                 ),
@@ -74,6 +89,7 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                                     padding: const EdgeInsets.only(bottom: 2),
                                     child: CustomCardWidget(
                                       newsModel: _favoriteNewsController.favoriteNews[index],
+                                      erasable: isClearButtonClicked,
                                     ));
                               }),
                             )),

@@ -10,12 +10,11 @@ class NewsController {
   final String apiKey = 'b44b54112787468fb74339f0fca150e4';
 
   Future<void> getNews(String keyword, int page) async {
-
-    //Kullanıcıdan alınan keyword ve page bilgileri ile api adresi olusturuluyor. 
+    //Kullanıcıdan alınan keyword ve page bilgileri ile api adresi olusturuluyor.
     var response = await http.get(Uri.parse('$baseUrl$keyword&$page&apiKey=$apiKey'));
     var jsonData = jsonDecode(response.body);
 
-   //status yerine statusCode=200 kontrolü de yapılabilir.
+    //status yerine statusCode=200 kontrolü de yapılabilir.
     if (jsonData['status'] == 'ok') {
       jsonData['articles'].forEach((element) {
         if (element['urlToImage'] != null && element['description'] != null) {
@@ -27,7 +26,6 @@ class NewsController {
             element['url'],
             element['source']['name'],
           );
-
           //Parse edilen datalar news listesine aktarılıyor. Viewsler ile direkt bu listeye erisiyoruz.
           news.add(newsModel);
         }

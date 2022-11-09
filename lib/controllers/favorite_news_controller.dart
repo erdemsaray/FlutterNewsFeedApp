@@ -14,6 +14,11 @@ class FavoriteNewsController {
     }
   }
 
+  Future<bool> isNewsFavorite(News news) async {
+    await getFavoriteNews();
+    return favoriteNews.contains(news);
+  }
+
   clearFavoriteNews(News news) async {
     favoriteNews.remove(news);
     SharedPreferences prefs = await SharedPreferences.getInstance();

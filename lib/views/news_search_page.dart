@@ -59,6 +59,7 @@ class _NewsSearchPageState extends State<NewsSearchPage> {
                             padding: const EdgeInsets.only(bottom: 2),
                             child: CustomCardWidget(
                               newsModel: _newsController.news[index],
+                              erasable: false,
                             ),
                           );
                         }),

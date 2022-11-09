@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/controllers/favorite_news_controller.dart';
 import 'package:newsapp/modals/news.dart';
 import 'package:newsapp/utils/project_variables.dart';
 import 'package:newsapp/views/news_details_page.dart';
 
-class CustomCardWidget extends StatelessWidget {
+class CustomCardWidget extends StatefulWidget {
   final News newsModel;
-  const CustomCardWidget({
+  final bool erasable;
+  CustomCardWidget({
     super.key,
     required this.newsModel,
+    required this.erasable,
   });
+
+  @override
+  State<CustomCardWidget> createState() => _CustomCardWidgetState();
+}
+
+class _CustomCardWidgetState extends State<CustomCardWidget> {
+  final FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: ProjectColors.splashColor,
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => NewsDetailsPage(
-              newsModel: newsModel,
+        if (widget.erasable) {
+          setState(() {
+            _favoriteNewsController.clearFavoriteNews(widget.newsModel);
+          });
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => NewsDetailsPage(
+                newsModel: widget.newsModel,
+              ),
             ),
-          ),
-        );
+          );
+        }
       },
       child: Card(
         color: ProjectColors.cardBackgroundColor,
@@ -37,7 +53,7 @@ class CustomCardWidget extends StatelessWidget {
               child: SizedBox(
                 width: 80,
                 child: Image.network(
-                  newsModel.imageURL,
+                  widget.newsModel.imageURL,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -48,7 +64,7 @@ class CustomCardWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    newsModel.title,
+                    widget.newsModel.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 20, color: ProjectColors.textColorBlack, fontWeight: FontWeight.bold),
@@ -57,7 +73,7 @@ class CustomCardWidget extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    newsModel.description,
+                    widget.newsModel.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -72,10 +88,12 @@ class CustomCardWidget extends StatelessWidget {
                     style: ProjectStyles.newsCardBottomDetails,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text('Source: ${newsModel.source}'), Text('Date: ${newsModel.date.split('T').first}'),],
+                      children: [
+                        Text('Source: ${widget.newsModel.source}'),
+                        Text('Date: ${widget.newsModel.date.split('T').first}'),
+                      ],
                     ),
                   ),
-
                 ],
               ),
             ),
