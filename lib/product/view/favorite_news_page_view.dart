@@ -1,36 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/controllers/favorite_news_controller.dart';
-import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/widgets/custom_card_widget.dart';
+import 'package:provider/provider.dart';
 
-class FavoriteNewsPage extends StatefulWidget {
-  const FavoriteNewsPage({super.key});
+import '../constants/project_variables.dart';
+import '../view_model/favorite_news_page_model.dart';
+import '../widgets/custom_card_widget.dart';
 
-  @override
-  State<FavoriteNewsPage> createState() => _FavoriteNewsPageState();
-}
-
-bool isClearButtonClicked = false;
-
-class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
-  final FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
-  bool loading = true; //favoriler yüklenene kadar circular progress indicator
-
-  void getNewsData() async {
-    await _favoriteNewsController.getFavoriteNews();
-    if (mounted) {
-      //favoriler gelmeden page'in dispose durumunda mounted kullanmazsak hata verir.
-      setState(() {
-        loading = false;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getNewsData();
-  }
+class NewsFavoritePageView extends StatelessWidget {
+  const NewsFavoritePageView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +34,11 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                       ElevatedButton(
                           style: ButtonStyle(
                               elevation: MaterialStateProperty.all(0),
-                              backgroundColor: isClearButtonClicked
+                              backgroundColor: context.watch<FavoriteNewsPageModel>().isClearButtonClicked
                                   ? MaterialStateProperty.all(Colors.grey[300])
                                   : MaterialStateProperty.all(Colors.transparent)),
-                          onPressed: () {
-                            setState(() {
-                              isClearButtonClicked = !isClearButtonClicked;
-                            });
-                          },
+                          onPressed: () =>
+                              Provider.of<FavoriteNewsPageModel>(context, listen: false).clearButtonClick(),
                           child: Icon(
                             Icons.clear_sharp,
                             color: ProjectColors.iconRedColor,
@@ -79,17 +52,17 @@ class _FavoriteNewsPageState extends State<FavoriteNewsPage> {
                 ),
                 Expanded(
                   child: Container(
-                      child: loading
+                      child: context.watch<FavoriteNewsPageModel>().state == FavoriteNewsPageStatus.busy
                           ? const Center(child: CircularProgressIndicator())
                           : ListView.builder(
                               scrollDirection: Axis.vertical,
-                              itemCount: _favoriteNewsController.favoriteNews.length,
+                              itemCount: context.watch<FavoriteNewsPageModel>().news.length,
                               itemBuilder: ((context, index) {
                                 return Padding(
                                     padding: const EdgeInsets.only(bottom: 2),
                                     child: CustomCardWidget(
-                                      newsModel: _favoriteNewsController.favoriteNews[index],
-                                      erasable: isClearButtonClicked,
+                                      newsModel: context.watch<FavoriteNewsPageModel>().news[index],
+                                      erasable: context.watch<FavoriteNewsPageModel>().isClearButtonClicked,
                                     ));
                               }),
                             )),

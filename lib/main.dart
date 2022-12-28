@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:newsapp/views/homepage.dart';
+import 'package:provider/provider.dart';
+
+import 'product/view/homepage.dart';
+import 'product/view_model/favorite_news_page_model.dart';
+import 'product/view_model/news_details_page_model.dart';
+import 'product/view_model/news_feed_page_model.dart';
+import 'product/view_model/news_search_page_model.dart';
+import 'product/view_model/news_webiew_page_model.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<NewsFeedPageModel>(
+      create: (context) => NewsFeedPageModel(),
+    ),
+    ChangeNotifierProvider<NewsSearchPageModel>(
+      create: (context) => NewsSearchPageModel(),
+    ),
+    ChangeNotifierProvider<NewsDetailsPageModel>(
+      create: (context) => NewsDetailsPageModel(),
+    ),
+    ChangeNotifierProvider<FavoriteNewsPageModel>(
+      create: (context) => FavoriteNewsPageModel(),
+    ),
+    ChangeNotifierProvider<NewsWebViewPageModel>(
+      create: (context) => NewsWebViewPageModel(),
+    ),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,4 +51,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/utils/project_variables.dart';
+import 'package:provider/provider.dart';
+
+import '../constants/project_variables.dart';
+import '../view_model/news_feed_page_model.dart';
+import '../view_model/news_search_page_model.dart';
 
 class CustomSearchWidget extends StatelessWidget {
   const CustomSearchWidget({
@@ -7,14 +11,12 @@ class CustomSearchWidget extends StatelessWidget {
     required this.textFormController,
     required this.hintText,
     required this.formIcon,
-    required this.searchClicked,
   }) : super(key: key);
 
   final TextEditingController textFormController;
   final String hintText;
   final IconData formIcon;
   final IconData? formSuffixIcon = null;
-  final VoidCallback searchClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,9 @@ class CustomSearchWidget extends StatelessWidget {
         ),
         suffixIcon: IconButton(
           onPressed: () {
-            searchClicked();
+            Provider.of<NewsSearchPageModel>(context, listen: false).changeSearchText(textFormController.text);
+            Provider.of<NewsFeedPageModel>(context, listen: false)
+                .searchButtonClicked(context, textFormController.text);
           },
           icon: Icon(formIcon),
           color: ProjectColors.iconBlackColor,

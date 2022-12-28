@@ -1,10 +1,11 @@
-import 'package:newsapp/modals/news.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FavoriteNewsController {
+import '../model/news.dart';
+
+class FavoriteService {
   //bu kısımda kullanıcının favori olarak isaretledigi haberler veri tabanına kaydedilebilir ve veri tabanından geri çekilebilir.
   List<News> favoriteNews = [];
-  getFavoriteNews() async {
+  Future<List<News>> getFavoriteNews() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? newsString = prefs.getString('news_key');
 
@@ -12,6 +13,8 @@ class FavoriteNewsController {
     if (newsString != null) {
       favoriteNews = News.decode(newsString);
     }
+
+    return favoriteNews;
   }
 
   Future<bool> isNewsFavorite(News news) async {

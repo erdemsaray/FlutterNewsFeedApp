@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/controllers/favorite_news_controller.dart';
-import 'package:newsapp/modals/news.dart';
-import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/views/news_details_page.dart';
+import 'package:provider/provider.dart';
+
+import '../constants/project_variables.dart';
+import '../model/news.dart';
+import '../service/favorite_service.dart';
+import '../view/news_details_page_view.dart';
+import '../view_model/news_details_page_model.dart';
 
 class CustomCardWidget extends StatefulWidget {
   final News newsModel;
   final bool erasable;
-  CustomCardWidget({
+  const CustomCardWidget({
     super.key,
     required this.newsModel,
     required this.erasable,
@@ -18,7 +21,7 @@ class CustomCardWidget extends StatefulWidget {
 }
 
 class _CustomCardWidgetState extends State<CustomCardWidget> {
-  final FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
+  final FavoriteService _favoriteNewsController = FavoriteService();
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +33,11 @@ class _CustomCardWidgetState extends State<CustomCardWidget> {
             _favoriteNewsController.clearFavoriteNews(widget.newsModel);
           });
         } else {
+          Provider.of<NewsDetailsPageModel>(context, listen: false).changeNewsModel(widget.newsModel);
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => NewsDetailsPage(
-                newsModel: widget.newsModel,
-              ),
+              builder: (_) => NewsDetailsPageView(),
             ),
           );
         }

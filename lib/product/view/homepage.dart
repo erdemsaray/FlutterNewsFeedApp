@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/views/news_favorite_page.dart';
-import 'package:newsapp/views/news_feed_page.dart';
+
+import '../constants/project_variables.dart';
+import 'favorite_news_page_view.dart';
+import 'news_feed_page_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         body: TabBarView(
           controller: _tabController,
-          children: const [NewsFeedPage(), FavoriteNewsPage()],
+          children: [NewsFeedPage(), const NewsFavoritePageView()],
         ),
       ),
     );

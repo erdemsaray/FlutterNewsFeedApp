@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class NewsWebViewPage extends StatefulWidget {
-  final String newsURL;
-  const NewsWebViewPage({Key? key, required this.newsURL}) : super(key: key);
+import '../view_model/news_webiew_page_model.dart';
+
+class NewsWebViewPageView extends StatefulWidget {
+  const NewsWebViewPageView({Key? key}) : super(key: key);
 
   @override
-  State<NewsWebViewPage> createState() => _NewsWebViewPageState();
+  State<NewsWebViewPageView> createState() => _NewsWebViewPageViewState();
 }
 
-class _NewsWebViewPageState extends State<NewsWebViewPage> {
+class _NewsWebViewPageViewState extends State<NewsWebViewPageView> {
   bool isLoading = true;
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _NewsWebViewPageState extends State<NewsWebViewPage> {
       body: Stack(
         children: <Widget>[
           WebView(
-            initialUrl: widget.newsURL,
+            initialUrl: context.watch<NewsWebViewPageModel>().newsURL,
             javascriptMode: JavascriptMode.unrestricted,
             onPageStarted: (finish) {
               setState(() {

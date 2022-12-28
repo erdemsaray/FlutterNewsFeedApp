@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/controllers/favorite_news_controller.dart';
-import 'package:newsapp/modals/news.dart';
-import 'package:newsapp/utils/project_variables.dart';
-import 'package:newsapp/views/news_webview_page.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:provider/provider.dart';
 
-class NewsDetailsPage extends StatefulWidget {
-  final News newsModel;
+import '../constants/project_variables.dart';
+import '../view_model/news_details_page_model.dart';
 
-  const NewsDetailsPage({super.key, required this.newsModel});
-
-  @override
-  State<NewsDetailsPage> createState() => _NewsDetailsPageState();
-}
-
-FavoriteNewsController _favoriteNewsController = FavoriteNewsController();
-bool isFavorited = false;
-
-class _NewsDetailsPageState extends State<NewsDetailsPage> {
-  @override
-  void initState() {
-    isFavorited = false;
-    super.initState();
-  }
+class NewsDetailsPageView extends StatelessWidget {
+  const NewsDetailsPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +24,16 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
         actions: [
           IconButton(
               color: ProjectColors.iconBlackColor,
-              onPressed: () async {
-                await Share.share('Share this link with your connections!', subject: widget.newsModel.newsURL);
+              onPressed: () {
+                Provider.of<NewsDetailsPageModel>(context, listen: false).shareButtonClicked();
               },
               icon: const Icon(Icons.share)),
           IconButton(
               color: ProjectColors.iconBlackColor,
               onPressed: () {
-                setState(() {
-                  isFavorited = !isFavorited;
-                  _favoriteNewsController.addToFavorites(widget.newsModel);
-                });
+                Provider.of<NewsDetailsPageModel>(context, listen: false).addToFavorites();
               },
-              icon: Icon(isFavorited ? Icons.favorite : Icons.favorite_border))
+              icon: Icon(context.watch<NewsDetailsPageModel>().isFavorite ? Icons.favorite : Icons.favorite_border))
         ],
         title: const Text(
           "News Details",
@@ -73,7 +53,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                     Container(
                       decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Image.network(
-                        widget.newsModel.imageURL,
+                        context.watch<NewsDetailsPageModel>().newsModel.imageURL,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -81,7 +61,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 10,
                     ),
                     Text(
-                      widget.newsModel.title,
+                      context.watch<NewsDetailsPageModel>().newsModel.title,
                       style: ProjectStyles.newsDetailsTitle,
                     ),
                     const SizedBox(
@@ -101,7 +81,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               const SizedBox(
                                 width: 5,
                               ),
-                              Text(widget.newsModel.source),
+                              Text(context.watch<NewsDetailsPageModel>().newsModel.source),
                             ],
                           ),
                           const SizedBox(
@@ -116,7 +96,7 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                               const SizedBox(
                                 width: 5,
                               ),
-                              Text(widget.newsModel.date.split('T').first)
+                              Text(context.watch<NewsDetailsPageModel>().newsModel.date.split('T').first)
                             ],
                           ),
                         ],
@@ -126,19 +106,13 @@ class _NewsDetailsPageState extends State<NewsDetailsPage> {
                       height: 10,
                     ),
                     Text(
-                      widget.newsModel.description,
+                      context.watch<NewsDetailsPageModel>().newsModel.description,
                       style: ProjectStyles.newsDetailsDetail,
                     ),
                     const Expanded(child: SizedBox(height: 40)),
                     ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => (NewsWebViewPage(
-                                      newsURL: widget.newsModel.newsURL,
-                                    ))),
-                          );
+                          Provider.of<NewsDetailsPageModel>(context, listen: false).webviewButtonClicked(context);
                         },
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(const Size(200, 40)),
